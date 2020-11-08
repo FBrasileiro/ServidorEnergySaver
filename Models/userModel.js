@@ -19,6 +19,7 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: [true, 'The user must enter a password'],
         minlength: 8,
+        select: false,
     },
     passwordConfirm: {
         type: String,
@@ -31,12 +32,18 @@ const userSchema = new mongoose.Schema({
         }
     }
 });
+
 userSchema.pre('save', async function(next){ // So roda se a senha foi modificada
     if(!this.isModified('password')) return next();
 
     this.password = await bcrypt.hash(this.password, 12);
     this.passwordConfirm = undefined;
 });
+
+userSchema.methods.isPasswordCorrect = async function(password, hashedPassword){
+    return await bcrypt.compare(password, hashedPassword);
+}
+
 const User = mongoose.model('Users', userSchema);
 
 module.exports = User;
