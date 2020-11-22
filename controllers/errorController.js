@@ -7,6 +7,9 @@ const handleDuplicateFieldDB = error => {
 
 }
 
+const handleJwtError = () => new AppError("Invalid token", 401);
+const handleJwtExpiredError = () => new AppError("Token Expired", 401);
+
 const sendErrorDev = (err, res) => { 
     // Usado apenas para desenvolvimento
     // Vai enviar todos os detalhes do erro
@@ -27,7 +30,6 @@ const sendErrorProd = (err, res) => {
         });
     }
     else{ // Erro Desconhecido. Nao vai leakar detalhes pro usuario
-        // console.log("Erro: ", err)
         res.status(500).json({ // Envia mensagem genérica
             status: 'error',
             message: 'Something went wrong'
@@ -43,13 +45,10 @@ module.exports = (err, req, res, next) => {
         sendErrorDev(err, res);
     }
     else if(process.env.NODE_ENV === 'prod'){
-        // let message = {...err};
-        // console.log(err.message)
-        if(err.code === 11000) {
-            err = handleDuplicateFieldDB(err);
-        }
+        if(err.code === 11000) err = handleDuplicateFieldDB(err);
+        if(err.name === "JsonWebTokenError") err = handleJwtError();
+        if(err.name === "TokenExpiredError") err = handleJwtExpiredError();
         sendErrorProd(err, res);
-
     }
 
 

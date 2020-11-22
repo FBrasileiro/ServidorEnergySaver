@@ -1,3 +1,4 @@
+const {promisify} = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('../Models/userModel');
 const catchAsync = require('../utils/catchAsync');
@@ -11,6 +12,7 @@ exports.signup = catchAsync(async (req ,res, next)=>{
         email: req.body.email,
         password: req.body.password,
         passwordConfirm: req.body.passwordConfirm,
+        passwordChangedAt: req.body.passwordChangedAt,
     });
 
     const token = signToken(newUser._id);
@@ -34,7 +36,6 @@ exports.login = async (req,res, next)=>{
         return next(new AppError("Incorrect email or password", 401));
     }
 
-    console.log(user);
     const token = signToken(user._id);
     
     res.status(200).json({
@@ -43,3 +44,24 @@ exports.login = async (req,res, next)=>{
     });
 
 }
+
+exports.protect = catchAsync(async (req, res, next)=>{
+
+    let token;
+    if(req.headers.authorization){
+        token = req.headers.authorization;
+    }
+
+    if(!token){
+        return next(new AppError("You are not logged in", 401));
+    }
+
+    const decodedJWT = await promisify(jwt.verify)(token, process.env.JWT_KEY); // verifica se o token não foi modificado
+
+    const user = await User.findById(decodedJWT.id);
+    if(!user) return next(new AppError('The user does no longer exists', 401));
+    if(user.changedPasswordAfter(decodedJWT.iat)) return next(new AppError("User recently changed password"));
+
+    req.user = user;
+    next(); // garante acesso a rotas protegidas
+})
