@@ -65,3 +65,17 @@ exports.protect = catchAsync(async (req, res, next)=>{
     req.user = user;
     next(); // garante acesso a rotas protegidas
 })
+
+
+exports.forgotPassword = catchAsync(async (req, res, next) => {
+    // pega o usuario com base no email
+    const user = await User.findOne({email: req.body.email});
+    if(!user) return next(new AppError("There is no user with that email address", 404));
+
+    // gera reset token
+    const resetToken = user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false });
+
+    // envia email
+})
+exports.resetPassword = (req, res, next) => {}
