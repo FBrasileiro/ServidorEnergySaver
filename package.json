@@ -1,9 +1,9 @@
 {
-  "name": "Servidor",
+  "name": "servidor",
   "version": "1.0.0",
-  "description": "Servidor para o app",
+  "description": "Back end desenvolvido para o projeto da materia Desafio Pesquisador no Senai CIMATEC ",
   "main": "server.js",
-  "license": "MIT",
+  "license": "GPLv2",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "dotenv": "^8.2.0",
