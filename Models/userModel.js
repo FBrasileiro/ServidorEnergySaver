@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema({
 userSchema.pre('save', async function(next){ // So roda se a senha foi modificada
     if(!this.isModified('password')) return next();
 
-    this.password = await bcrypt.hash(this.password, process.env.BCRYPT_SALT);
+    this.password = await bcrypt.hash(this.password, 12);
     this.passwordConfirm = undefined;
 });
 
