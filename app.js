@@ -5,7 +5,7 @@ const morgan = require('morgan');
 const authRouter = require('./routes/authRoutes');
 const userRouter = require('./routes/userRoutes');
 const deviceRouter = require('./routes/deviceRoutes');
-const debugRouter = require('./routes/debugRoutes');
+const debugRouter = require('./routes/debugRoutes'); // rota de testes, remover da produção
 
 // Error Handling
 const AppError = require('./utils/appError');

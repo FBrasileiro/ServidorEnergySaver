@@ -5,7 +5,7 @@ const AppError = require('../utils/appError');
 
 
 exports.sendUserData = catchAsync(async (req, res, next) => {
-
+    // TODO: Melhorar a segurança
     const user = await User.findOne({_id:req.body.user_id, 
                                     name:req.body.username});
     if(!user) return next(new AppError("Invalid info", 404));

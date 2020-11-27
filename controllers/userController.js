@@ -3,7 +3,7 @@ const Data = require('../Models/dataModel');
 const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
-exports.updateUser = (req,res)=>{
+exports.updateUser = (req,res)=>{ // TODO
     res.status(200).json({
         message: "Funcionando"
     });
