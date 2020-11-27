@@ -4,6 +4,8 @@ const morgan = require('morgan');
 // Router
 const authRouter = require('./routes/authRoutes');
 const userRouter = require('./routes/userRoutes');
+const deviceRouter = require('./routes/deviceRoutes');
+const debugRouter = require('./routes/debugRoutes');
 
 // Error Handling
 const AppError = require('./utils/appError');
@@ -18,6 +20,8 @@ app.use((req, res, next)=>{
 })
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/debug', debugRouter);
+app.use('/api/v1/device', deviceRouter);
 
 
 app.all('*', (req, res, next)=>{

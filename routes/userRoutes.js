@@ -6,7 +6,7 @@ const authController = require('../controllers/authController');
 const router = express.Router();
 router.patch('/update', authController.protect, userController.updateUser)
       .delete('/delete', authController.protect, userController.deleteUser)
-      .get('/', authController.protect, userController.getUserData)
+      .get('/getUserData', authController.protect, userController.getUserData)
       .post('/forgotPassword', authController.forgotPassword)
       .post('/resetPassword', authController.resetPassword);
 
