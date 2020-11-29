@@ -21,6 +21,10 @@ const dataSchema = new mongoose.Schema({
         type:String,
         required:[true, "name needed"]
     },
+    device_color:{
+        type:String,
+        required:[true, "color needed"]
+    },
     data:{
         consume:{
             type:Number,

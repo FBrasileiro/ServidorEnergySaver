@@ -17,6 +17,10 @@ const deviceSchema = new mongoose.Schema({
         type: String,
         required: [true, 'The device must known the owner id']
     },
+    color:{
+        type:String,
+        required: [true, 'The device must have a color']
+    }
 });
 
 const Device = mongoose.model('Device', deviceSchema);

@@ -8,6 +8,7 @@ const signToken = id => jwt.sign({ id }, process.env.JWT_KEY, {expiresIn: proces
 
 exports.signup = catchAsync(async (req ,res, next)=>{
     const newUser = await User.create({
+        username:req.body.username,
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
@@ -21,7 +22,11 @@ exports.signup = catchAsync(async (req ,res, next)=>{
         status: 'success',
         token: token,
         data:{
-            user: newUser,
+            user: {
+                _id:newUser._id,
+                username:newUser.username,
+                email:newUser.email,
+            },
         }
     })
 });

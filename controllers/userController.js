@@ -36,7 +36,7 @@ exports.getUserSyncedDevices = catchAsync(async (req, res, next) => {
     });
     if(!user) return next(new AppError("Invalid info", 404));
 
-    const device = await Device.findOne({
+    const device = await Device.find({
         user_id:user._id,
         username:user.name,
     })
@@ -50,26 +50,35 @@ exports.getUserSyncedDevices = catchAsync(async (req, res, next) => {
 })
 
 exports.getSyncedDeviceData = catchAsync(async (req, res, next) => {
-
     const user = await User.findOne({_id:req.query.user_id, 
         name:req.query.username});
     if(!user) return next(new AppError("Invalid info", 404));
-    let device;
-    if(!req.query.device_id)
-        device = await Device.find({
-            user_id:user._id,
-            username:user.name,
-        })
-    else
-        device = await Device.find({
-            user_id:user._id,
-            username:user.name,
-            _id:req.query.device_id
-        })
-
+    var query = {
+        user_id:user._id,
+        username:user.name,
+    }
+    req.query.device_id ? query.device_id = req.query.device_id : null
+    const device = await Device.find(query)
+    const data = await Data.find(query)
     res.status(200).json({
         synced:{
-            devices:device
+            data:data,
         }
     });
 })
+
+exports.getUserInfo = catchAsync(async (req, res, next) => {
+    const user = await User.findOne({
+        _id:req.query.user_id,
+        name:req.query.username
+    }).select('-password')
+
+    console.log(user)
+    if(!user) return next(new AppError("This user does not exists", 404));
+    
+    res.status(200).json({
+        status:'success',
+        data:user
+    })
+    
+});
