@@ -7,8 +7,11 @@ const router = express.Router();
 
 router.patch('/update', authController.protect, userController.updateUser)
       .delete('/delete', authController.protect, userController.deleteUser)
-      .get('/getUserData', authController.protect, userController.getUserData)
       .post('/forgotPassword', authController.forgotPassword)
-      .post('/resetPassword', authController.resetPassword);
+      .post('/resetPassword', authController.resetPassword)
+      .get('/getUserData', authController.protect, userController.getUserData)
+      .get('/getUserSyncedDevices', authController.protect, userController.getUserSyncedDevices)
+      .get('/getSyncedDeviceData', authController.protect, userController.getSyncedDeviceData)
+      
 
 module.exports = router;

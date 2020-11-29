@@ -17,10 +17,14 @@ const dataSchema = new mongoose.Schema({
         type:String,
         required:[true, "id needed"]
     },
+    device_name:{
+        type:String,
+        required:[true, "name needed"]
+    },
     data:{
         consume:{
             type:Number,
-            required:[true, 'needed']
+            required:[true, 'consume needed']
         },
         date:{
             type:Date,

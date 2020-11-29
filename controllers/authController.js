@@ -41,14 +41,17 @@ exports.login = async (req,res, next)=>{
     
     res.status(200).json({
         status: 'sucess',
+        _id:user._id,
+        username:user.name,
         token: token
     });
 
 }
 
 exports.protect = catchAsync(async (req, res, next)=>{
-    console.log(req.body)
+    // console.log(req.body)
     let token;
+    // console.log(req.headers)
     if(req.headers.authorization){
         token = req.headers.authorization;
     }
