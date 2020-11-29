@@ -19,7 +19,7 @@ exports.deleteUser = (req,res)=>{
 exports.getUserData = catchAsync(async (req, res, next)=>{
     const username = req.query.username
     const user_id = req.query.user_id 
-    const user = await User.findOne({name:username, _id:user_id})
+    const user = await User.findOne({username:username, _id:user_id})
     if(!user) return next(new AppError('Cant find user', 404))
 
     const data = await Data.find({ username, user_id})
@@ -32,7 +32,7 @@ exports.getUserData = catchAsync(async (req, res, next)=>{
 exports.getUserSyncedDevices = catchAsync(async (req, res, next) => {
     const user = await User.findOne({
         _id:req.query.user_id, 
-        name:req.query.username
+        username:req.query.username
     });
     if(!user) return next(new AppError("Invalid info", 404));
 
@@ -51,7 +51,7 @@ exports.getUserSyncedDevices = catchAsync(async (req, res, next) => {
 
 exports.getSyncedDeviceData = catchAsync(async (req, res, next) => {
     const user = await User.findOne({_id:req.query.user_id, 
-        name:req.query.username});
+        username:req.query.username});
     if(!user) return next(new AppError("Invalid info", 404));
     var query = {
         user_id:user._id,
@@ -70,15 +70,21 @@ exports.getSyncedDeviceData = catchAsync(async (req, res, next) => {
 exports.getUserInfo = catchAsync(async (req, res, next) => {
     const user = await User.findOne({
         _id:req.query.user_id,
-        name:req.query.username
+        username:req.query.username
     }).select('-password')
 
     console.log(user)
     if(!user) return next(new AppError("This user does not exists", 404));
-    
+
+    const devices = await Device.find({
+        username:user.username,
+        user_id:user._id,
+    })
+
     res.status(200).json({
         status:'success',
-        data:user
+        user,
+        sync:devices
     })
     
 });
