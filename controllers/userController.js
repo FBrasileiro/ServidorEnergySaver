@@ -38,7 +38,7 @@ exports.getUserSyncedDevices = catchAsync(async (req, res, next) => {
 
     const device = await Device.find({
         user_id:user._id,
-        username:user.name,
+        username:user.username,
     })
     
     res.status(200).json({
@@ -55,7 +55,7 @@ exports.getSyncedDeviceData = catchAsync(async (req, res, next) => {
     if(!user) return next(new AppError("Invalid info", 404));
     var query = {
         user_id:user._id,
-        username:user.name,
+        username:user.username,
     }
     req.query.device_id ? query.device_id = req.query.device_id : null
     const device = await Device.find(query)

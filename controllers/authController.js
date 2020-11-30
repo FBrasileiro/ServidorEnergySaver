@@ -7,6 +7,7 @@ const AppError = require('../utils/appError');
 const signToken = id => jwt.sign({ id }, process.env.JWT_KEY, {expiresIn: process.env.JWT_EXPIRES_IN});
 
 exports.signup = catchAsync(async (req ,res, next)=>{
+    console.log(req.body)
     const newUser = await User.create({
         username:req.body.username,
         name: req.body.name,
